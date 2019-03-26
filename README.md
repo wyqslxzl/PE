@@ -1,6 +1,6 @@
 # Procssesing code and results for our PE paper
 # main.m       
-The whole processing code, including data reading, 100 times 10-folds CV, results recording and ROC curve plot
+The whole processing code, including data reading, 100 times 10-folds CV (CV-LASSO + LSVM), results recording and ROC curve plot
 # statistic.m  
 The results recording and ROC curve plot part of main.m
 # Features_all or Feature_BN246.mat
