@@ -51,7 +51,7 @@ DEV = cell([10 , 10 , length(pv), 20 , times]);
 group_test = cell([10 , times]);
 IDX_FS = cell([10 , 10 , length(pv), times]);
 
-for m = 97 : times
+for m = 1 : times
     fprintf('%d\n',m);
     %% Random Grouping
     while 1
@@ -60,7 +60,7 @@ for m = 97 : times
         for i = 1 : 10
             group_train{i} = IDX;
             if i < 10
-                group_test{i,m} = IDX((i-1)*7+1:i*7);  % 69*0.1¡Ö7
+                group_test{i,m} = IDX((i-1)*7+1:i*7);  % 69*0.1Â¡Ã–7
                 group_train{i}((i-1)*7+1:i*7) = [];
             else
                 group_test{i,m} = IDX((i-1)*7+1:end);
