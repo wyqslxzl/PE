@@ -10,4 +10,4 @@ Including the name of aal 90 ROIs and BN246 246 ROIS, extracting from CONN softw
 # permutation.m
 Put this m file into results/results_aal folder, this folder can be gotten through decompressing the rar file in results folder.
 # Update Apr 11, 2019
-update the permutation test code and fix errors of ROC relevant  
+update the permutation test code and fix errors of ROC relevant in main.m and statistic.m
