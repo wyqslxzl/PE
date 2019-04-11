@@ -7,7 +7,7 @@ The results recording and ROC curve plot part of main.m. By running this file, s
 Including correlation cofficients between 90 ROIs in aal atlas or 246 ROIs in BN 246 atlas
 # names.mat
 Including the name of aal 90 ROIs and BN246 246 ROIS, extracting from CONN software
-# permutation.m
-Put this m file into results/results_aal folder, this folder can be gotten through decompressing the rar file in results folder.
 # Update Apr 11, 2019
 update the permutation test code and fix errors of ROC relevant in main.m and statistic.m
+# permutation.m
+Permutation test of accuracy and AUC
