@@ -60,7 +60,7 @@ for m = 1 : times
         for i = 1 : 10
             group_train{i} = IDX;
             if i < 10
-                group_test{i,m} = IDX((i-1)*7+1:i*7);  % 69*0.1Â¡Ã–7
+                group_test{i,m} = IDX((i-1)*7+1:i*7);  % 69*0.1¡Ö7
                 group_train{i}((i-1)*7+1:i*7) = [];
             else
                 group_test{i,m} = IDX((i-1)*7+1:end);
@@ -172,6 +172,7 @@ SP = zeros(1,1000);
 DS = zeros(1,1000);
 DE = [];
 num = zeros(1,size(Features,1));
+label = [zeros(30,1);ones(39,1)];
 for m = 1 : times
     for i = 1 : 10
 
@@ -193,8 +194,17 @@ for m = 1 : times
         DS((m-1)*10+i) = Matrix_num(IDX);
         tmp = DEV(i,:,:,:,m);
         tmp = tmp(IDX);
-        DE = [DE;tmp{1}]; 
         num(IDX_FS{i,X,Y,m})=num(IDX_FS{i,X,Y,m})+1; 
+% The ROC curve is sometimes reversed, i.e., the curve is under the line 
+% from (0,0) to (1,1). Thus, soft-output of SVM should be fixed. The reason
+% for this problem is currently unknown. Maybe due to the lable of the 
+% first sample in training group.
+        tmp2 = tmp{1}(:,2);
+        if abs(( sum( (tmp2>=0.5) == label(group_test{i,m}) ) / length(tmp2) - AC((m-1)*10+i) )) < 0.0001 
+            dev = [dev;tmp2];
+        else
+            dev = [dev;1-tmp2];
+        end
     end
 end
 M = mean([AC',SE',SP',DS']);
@@ -251,42 +261,7 @@ for m = 1 : times
     end
 end
 
-% The ROC curve is sometimes reversed, i.e., the curve is under the line 
-% from (0,0) to (1,1). Thus, soft-output of SVM should be fixed. The reason
-% for this problem is currently unknown. Maybe due to the lable of the 
-% first sample in training group.
-label = [zeros(30,1);ones(39,1)];
 label = label( group );
-for m = 1 : times   
-    
-    tmp = sort( DE((m-1)*69+1:m*69,1) );
-    for i = 1 : 69
-        
-        test = DE((m-1)*69+1:m*69,1) >= tmp(i);   
-        TP = sum( test( test == label((m-1)*69+1:m*69) ) == 1 );
-        TN = sum( test( test == label((m-1)*69+1:m*69) ) == 0 );
-        FP = sum( test( test ~= label((m-1)*69+1:m*69) ) == 1 );
-        FN = sum( test( test ~= label((m-1)*69+1:m*69) ) == 0 );
-        TPR(i) = TP / ( TP + FN );
-        FPR(i) = FP / ( FP + TN );
-    end
-
-    AA = diff( FPR );
-    IDX = find( AA == 0 );
-    IDX = [1,IDX];
-    AUC = 0;
-    for i = 1 : length(IDX) - 1
-        AUC = AUC - ( FPR( IDX(i+1) ) - FPR( IDX(i) ) ) * TPR( IDX(i+1) );
-    end
-    
-    if AUC >= 0.5
-        dev = [dev;DE((m-1)*69+1:m*69,1)];
-    else
-        dev = [dev;DE((m-1)*69+1:m*69,2)];
-    end 
-    
-end 
-
 tmp = sort(dev);
 for i = 1 : 69*times
     
